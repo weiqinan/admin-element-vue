@@ -2,7 +2,7 @@
  * 用户 Mock 数据
  * @author LiQingSong
  */
-import { getQueryValue } from '@/utlis/url';
+// import { getQueryValue } from '@/utlis/url';
 
 const tokens = {
     admin: {
@@ -40,7 +40,7 @@ export default [
           }
     
           return {
-            code: 200,
+            code: 1,
             data: token
           };
         }
@@ -50,9 +50,12 @@ export default [
         url: '/user/info.*',
         type: 'get',
         response: options => {
-
-          const token = getQueryValue(options.url, 'token');
+            console.log(options);
+        //   const token = getQueryValue(options.url, 'token');
+          const token = 'admin-token';
           const info = users[token];
+        
+          console.log(info);
           
           // mock error
           if (!info) {
@@ -62,12 +65,12 @@ export default [
             };
           }
 
+          console.log('/user/info.*');
+
           return {
-              code: 200,
+              code: 1,
               data: info
           };
-
-
         }
     },
     // 用户退出
@@ -75,10 +78,11 @@ export default [
         url: '/user/logout',
         type: 'post',
         response: () => {
-          return {
-            code: 200,
-            msg: '退出成功'
-          };
+            console.log('gegeg');
+            return {
+                code: 1,
+                msg: '退出成功'
+            };
         }
     }
 ];

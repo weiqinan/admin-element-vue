@@ -14,7 +14,9 @@ NProgress.configure({ showSpinner: false }); // NProgress Configuration
 
 // 不验证重定向的白名单
 const whiteList = [
-    siteLoginRouter
+    siteLoginRouter,
+    '/regist',
+    '/forgetpass'
 ];
 
 router.beforeEach(async(to, from, next) => {
@@ -37,7 +39,6 @@ router.beforeEach(async(to, from, next) => {
                 // 获取用户角色权限
                 // 注意:角色必须是一个对象数组! 例如: ['admin'] or ,['test','edit']
                 const { roles } = await store.dispatch('user/getInfo');
-                // console.log(roles);
 
                 // 根据角色生成可访问路由映射
                 const accessRoutes = await store.dispatch('permission/generateRoutes', roles);

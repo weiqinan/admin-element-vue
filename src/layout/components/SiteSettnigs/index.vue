@@ -79,7 +79,8 @@ export default {
     height: 45px;
     line-height: 45px;
     right: 0;
-    top: 30%;
+    // top: 30%;
+    bottom: 20px;
     background-color: $leftBgColor;
     color: $leftFontColor;
     text-align: center;

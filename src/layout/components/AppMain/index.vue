@@ -1,5 +1,5 @@
 <template>  
-    <router-view :key="key" />
+    <router-view :key="key"/>
 </template>
 <script>
 /** 
@@ -10,7 +10,8 @@ export default {
   name: 'AppMain',
   computed: {
     key() {
-      return this.$route.path;
+        console.log('gegeg');
+      return this.$route.fullPath;
     }
   }
 };

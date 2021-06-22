@@ -3,7 +3,8 @@
  * @author LiQingSong
  */
 import { login, logout, getInfo } from '@/service/user';
-import { getToken, setToken, removeToken } from '@/service/lib/localToken';
+// setToken
+import { getToken, removeToken } from '@/service/lib/localToken';
 import { resetRouter } from '@/router';
 import { isExternal } from '@/utlis/validate';
 import { serverLoginUrl, serverLogoutUrl, siteLoginRouter } from '@/settings';
@@ -34,15 +35,15 @@ const mutations = {
 };
 const actions = {
     // 用户登录
-    login({ commit }, userInfo) {
-        const { username, password } = userInfo;
+    login({ state }, userInfo) {
+        console.log(state.name);
+        const { userid, password } = userInfo;
         return new Promise((resolve, reject) => {
-          login(serverLoginUrl, { username: username, password: password }).then(response => {
-            const { data } = response;
-            const { token } = data;
-            commit('SET_TOKEN', token);
-            setToken(token);
-            resolve(data);
+          login(serverLoginUrl, { userId: userid, password: password }).then(response => {
+            // const { token } = data;
+            // commit('SET_TOKEN', token);
+            // setToken(token);
+            resolve(response);
           }).catch(error => {
             reject(error);
           });
@@ -53,7 +54,8 @@ const actions = {
     getInfo({ commit, state }) {
         return new Promise((resolve, reject) => {
             getInfo(state.token).then(response => {
-                const { data } = response;
+                const data = response;
+                console.log(response);
 
                 if (!data) {
                   reject('当前用户登入信息已失效，请重新登入再操作.');

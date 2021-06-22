@@ -2,7 +2,7 @@
     <div id="indexlayout-left" :class="{'narrow': isCollapse}">
       <div class="indexlayout-left-logo" v-if="siteSidebarLogo">
         <router-link to="/" class="logo-url">
-          <h3 v-if="!isCollapse" class="logo-title" >AdminElementVue</h3>
+          <h3 v-if="!isCollapse" class="logo-title" >量化街</h3>
           <img v-else alt="Vue logo" src="../../assets/images/logo.png" width="30">
         </router-link>
       </div>
@@ -21,7 +21,6 @@
                   <template v-else>
                     <template v-for="route in permission_routes">
                       <template v-if="!route.hidden">
-
                         <sidebar-menu-item v-for="route2 in route.children" :key="route.path + '/' + route2.path" :routes="route2" :base-path="route.path" :resolve-path="route.path" :active-top-menu="getTopMenuActive"/>
                     
                       </template>
@@ -67,7 +66,17 @@ export default {
         }
     },
     mounted() { 
-        // console.log(this.permission_routes);
+        // console.log('permission_routes', this.permission_routes);
+        // 手动删除单个排行榜详情页
+        for(let a in this.permission_routes) {
+            const item = this.permission_routes[a];
+            if (item.children && item.path === '/') {
+                
+                // this.permission_routes.filter((item) => item.isDefault).length > 0;
+                item.children = item.children.filter((item) => !item.hideMark);
+                // item.children.splice(2,1);
+            }
+        }
     }
 };
 </script>
@@ -78,7 +87,8 @@ export default {
   flex-direction: column;
   width: $leftSideBarWidth;
   height: 100vh;
-  background-color: $leftBgColor;
+  background-color: #F6F8FC;
+//   background-color: #222834;
   color: $topMenuFontColor;
   transition-duration: 0.1s;
   .indexlayout-left-logo{
@@ -98,7 +108,7 @@ export default {
         margin: 0;
         font-size: 16px;
         font-family: Roboto,sans-serif;
-        color: $topMenuFontColor;
+        color: #3BA8ED;
       }
     }
     img{
@@ -115,9 +125,15 @@ export default {
         flex:1;
     } */
   }
+  
 
   &.narrow{
       width: $leftSideBarMinWidth;      
   }
+}
+</style>
+<style>
+.el-menu-item{
+    border-radius: 0 30px 30px 0;
 }
 </style>

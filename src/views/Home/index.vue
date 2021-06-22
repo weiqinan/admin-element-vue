@@ -1,284 +1,367 @@
 <template>
-  <div class="main-conent main-conent-minheight">
-
-    <el-row :gutter="24">
-        <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-          <el-card class="box-card" shadow="never">
-            <div slot="header">
-              <span>日销售额</span>
-              <el-tooltip effect="dark" content="说明文字" placement="top">
-                  <svg-icon icon-class="ask" class="float-right cursor-pointer" />
-              </el-tooltip>
+<div class="main">
+    <div class="index_tips" v-if="showTip">
+        <a class="close" @click="close_tips"></a>
+        <p>您正在访问的是量化街，本网站所提供的内容及信息均遵守中华人民共和国香港特别行政区的法律法规。</p>
+    </div>
+    <div class="index_head">
+        <div class="hd">
+            <a class="fr" @click="turnToRank">查看总排行榜</a>
+            <div class="sec_title"><i class="top3"></i>每月量化街TOP3</div>
+        </div>
+        <div class="sec_top3" v-if="tableData.length">
+            <div class="section">
+                <template v-if="tableData[0]">
+                    <div class="username">{{tableData[0].accountnickname}}</div>
+                    <div class="info">
+                        <div class="left">
+                            <strong>总盈利</strong>
+                            <code>{{tableData[0].profit_rate}}%</code>
+                        </div>
+                        <div class="right">
+                            <li>
+                                <label>年龄</label>{{tableData[0].years}}年
+                            </li>
+                            <li>
+                                <label>月盈利率</label>{{tableData[0].avgprofit_rate}}%
+                            </li>
+                            <li>
+                                <label>最大浮亏</label>{{tableData[0].maxdrawdown_rate}}%
+                            </li>
+                        </div>
+                    </div>
+                </template>
+                <template v-else>
+                    <div style="height:138px;"></div>
+                </template>
             </div>
-            <div class="num">¥ 88,888</div>
-            <el-divider></el-divider>
-            <el-row class="bot">
-                <el-col :span="12">
-                  总销售额
-                </el-col>
-                <el-col :span="12" class="text-right">
-                   ¥ 888,888
-                </el-col>
-            </el-row>
-          </el-card>
-        </el-col>
-        <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-          <el-card class="box-card" shadow="never">
-            <div slot="header">
-              <span>日访问量</span>
-              <el-tooltip effect="dark" content="说明文字" placement="top">
-                  <svg-icon icon-class="ask" class="float-right cursor-pointer" />
-              </el-tooltip>
-            </div>
-            <div class="num">88,888</div>
-            <el-divider></el-divider>
-            <el-row class="bot">
-                <el-col :span="12">
-                  总访问量
-                </el-col>
-                <el-col :span="12" class="text-right">
-                   888,888
-                </el-col>
-            </el-row>
-          </el-card>
-        </el-col>
-        <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-          <el-card class="box-card" shadow="never">
-            <div slot="header">
-              <span>日订单量</span>
-              <el-tooltip effect="dark" content="说明文字" placement="top">
-                  <svg-icon icon-class="ask" class="float-right cursor-pointer" />
-              </el-tooltip>
-            </div>
-            <div class="num">8,888</div>
-            <el-divider></el-divider>
-            <el-row class="bot">
-                <el-col :span="12">
-                  转化率
-                </el-col>
-                <el-col :span="12" class="text-right">
-                   88%
-                </el-col>
-            </el-row>
-          </el-card>
-        </el-col>
-        <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-          <el-card class="box-card" shadow="never">
-            <div slot="header">
-              <span>新增用户</span>
-              <el-tooltip effect="dark" content="说明文字" placement="top">
-                  <svg-icon icon-class="ask" class="float-right cursor-pointer" />
-              </el-tooltip>
-            </div>
-            <div class="num">888</div>
-            <el-divider></el-divider>
-            <el-row class="bot">
-                <el-col :span="12">
-                  总用户
-                </el-col>
-                <el-col :span="12" class="text-right">
-                   888,888
-                </el-col>
-            </el-row>
-          </el-card>
-        </el-col>
-    </el-row>
-
-    <el-card class="box-card" shadow="never">
-      <div slot="header">
-        <el-row>
-          <el-col :span="8">
-              <span>访问量</span>
-          </el-col>
-          <el-col :span="16" class="text-right">
-            <el-radio-group v-model="radio1" size="mini">
-              <el-radio-button label="今日"></el-radio-button>
-              <el-radio-button label="本周"></el-radio-button>
-              <el-radio-button label="本月"></el-radio-button>
-              <el-radio-button label="全年"></el-radio-button>
-            </el-radio-group>
-            <el-date-picker
-              v-model="datevalue1"
-              type="daterange"
-              size="mini"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              style="width:220px;margin-left:5px;">
-            </el-date-picker>
-
-          </el-col>
-        </el-row>
-        
-      </div>
-      <el-row>
-          <el-col :xs="24" :sm="24" :md="24" :lg="16" :xl="16">
-            <h5 class="traffic-title">访问量趋势</h5>
-            <div id="home-traffic-chart" style="height:240px;"></div>
-          </el-col>
-          <el-col :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
-            <h5 class="traffic-title">访问量排行</h5>
-            <el-row>
-              <el-col :span="12" class="traffic-li">
-                   <el-avatar class="traffic-num float-left hot" size="small" >1</el-avatar>
-                   <span>网页小功能1</span>
-              </el-col>
-              <el-col :span="12" class="traffic-li text-right">888,888</el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12" class="traffic-li">
-                   <el-avatar class="traffic-num float-left hot" size="small" >2</el-avatar>
-                   <span>网页小功能2</span>
-              </el-col>
-              <el-col :span="12" class="traffic-li text-right">888,888</el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12" class="traffic-li">
-                   <el-avatar class="traffic-num float-left hot" size="small" >3</el-avatar>
-                   <span>网页小功能3</span>
-              </el-col>
-              <el-col :span="12" class="traffic-li text-right">888,888</el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12" class="traffic-li">
-                   <el-avatar class="traffic-num float-left" size="small" >4</el-avatar>
-                   <span>网页小功能4</span>
-              </el-col>
-              <el-col :span="12" class="traffic-li text-right">888,888</el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12" class="traffic-li">
-                   <el-avatar class="traffic-num float-left" size="small" >5</el-avatar>
-                   <span>网页小功能5</span>
-              </el-col>
-              <el-col :span="12" class="traffic-li text-right">888,888</el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12" class="traffic-li">
-                   <el-avatar class="traffic-num float-left" size="small" >6</el-avatar>
-                   <span>网页小功能6</span>
-              </el-col>
-              <el-col :span="12" class="traffic-li text-right">888,888</el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12" class="traffic-li">
-                   <el-avatar class="traffic-num float-left" size="small" >7</el-avatar>
-                   <span>网页小功能7</span>
-              </el-col>
-              <el-col :span="12" class="traffic-li text-right">888,888</el-col>
-            </el-row>
             
+            <div class="section">
+                <template v-if="tableData[1]">
+                    <div class="username">{{tableData[1].accountnickname}}</div>
+                    <div class="info">
+                        <div class="left">
+                            <strong>总盈利</strong>
+                            <code>{{tableData[1].profit_rate}}%</code>
+                        </div>
+                        <div class="right">
+                            <li>
+                                <label>年龄</label>{{tableData[1].years}}年
+                            </li>
+                            <li>
+                                <label>月盈利率</label>{{tableData[1].avgprofit_rate}}%
+                            </li>
+                            <li>
+                                <label>最大浮亏</label>{{tableData[1].maxdrawdown_rate}}%
+                            </li>
+                        </div>
+                    </div>
+                </template>
+                <template v-else>
+                    <div style="height:138px;"></div>
+                </template>
+            </div>
+            <div class="section">
+                <template v-if="tableData[2]">
+                    <div class="username">{{tableData[2].accountnickname}}</div>
+                    <div class="info">
+                        <div class="left">
+                            <strong>总盈利</strong>
+                            <code>{{tableData[2].profit_rate}}%</code>
+                        </div>
+                        <div class="right">
+                            <li>
+                                <label>年龄</label>{{tableData[2].years}}年
+                            </li>
+                            <li>
+                                <label>月盈利率</label>{{tableData[2].avgprofit_rate}}%
+                            </li>
+                            <li>
+                                <label>最大浮亏</label>{{tableData[2].maxdrawdown_rate}}%
+                            </li>
+                        </div>
+                    </div>
+                </template>
+                <template v-else>
+                    <div style="height:138px;"></div>
+                </template>
+            </div>
+        </div>
+        <div style="clear:both;"></div>
+    </div>
+
+    <div class="index_adv">
+        <img src="../../assets/img/index_adv.png" />
+    </div>
+
+    <div class="index_body">
+        <div class="hd">
+            <div class="sec_title"><i class="index_paihangbang"></i>收益排行榜</div>
+            <div class="tab">
+                <ul>
+                    <li @click="showMenu('1')" :class="[currentMenu === '1' ? 'active': '']">实盘认证</li>
+                    <li @click="showMenu('0')" :class="[currentMenu === '0' ? 'active': '']">模拟账户</li>
+                </ul>
+            </div>
+            <a @click="turnToRank">更多</a>
+        </div>
+        <div class="bd" style="display:block">
+            <div class="infinite-list-wrapper" ref="infiniteListWrapperMain" style="overflow:auto">
+                <el-table
+                    v-infinite-scroll="getData"
+                    infinite-scroll-disabled="disabled"
+                    :data="tableData"
+                    stripe
+                    >
+                    <el-table-column
+                        fixed
+                        prop="name"
+                        label="基本信息"
+                        width="280">
+                        <template slot-scope="{row, $index}">
+                            <div class="names-container" @click="showDetailItem(row)">
+                                <el-popover
+                                placement="right"
+                                width="400"
+                                trigger="hover">
+                                    <div>
+                                        <p>这是一段内容,这是一段内容,这是一段内容,这是一段内容</p>
+                                        <p>这是一段内容,这是一段内容,这是一段内容,这是一段内容</p>
+                                    </div>
+                                    <div class="avator-area" slot="reference">
+                                        <span class="xuhao">{{$index + 1}}</span>
+                                        <img class="avartar" :src="row.header_icon" />
+                                    </div>
+                                </el-popover>
+                                <div class="info">
+                                    <div class="username jieq">{{row.usernickname}}{{row.accountnickname}}</div>
+                                    <div class="action">
+                                        <img :src="row.usergroup_icon" />
+                                        <img :src="row.trader_icon" />
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        prop="symbol"
+                        label="专注品种"
+                        min-width="120">
+                        <template slot-scope="{row}">
+                            <span v-if="row.symbol">{{row.symbol}}</span>
+                            <span v-else>--</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        prop="profit_rate"
+                        label="总盈亏"
+                        min-width="120">
+                        <template slot-scope="{row}">
+                            <span class="code">{{row.profit_rate}} %</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        prop="years"
+                        label="年龄"
+                        min-width="120">
+                        <template slot-scope="{row}">
+                            <span class="code">{{row.years}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        prop="avgprofit_rate"
+                        label="月盈利率"
+                        min-width="120">
+                        <template slot-scope="{row}">
+                            <span class="code">{{row.avgprofit_rate}} %</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        prop="maxdrawdown_rate"
+                        label="最大浮亏"
+                        min-width="120">
+                        <template slot-scope="{row}">
+                            <span class="code">{{row.maxdrawdown_rate}} %</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        prop="name"
+                        label="走势图"
+                        min-width="260">
+                        <template slot-scope="{row}">
+                            <div class="chart_bg_area">
+                                <img class="phb_zhexiantu" @click="gotoLook(row.userid)" src="../../assets/img/chart_bg.png" />
+                            </div>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <p v-if="loading" class="tips">加载中...</p>
+                <p v-if="noMore" class="tips">没有更多了</p>
+            </div>
             
+        </div>
+        <!-- <div class="item load-more">
+            <button type="button" class="load-more-btn" @click="getData(true)">加载更多</button>
+        </div> -->
+    </div>
 
-          </el-col>
-      </el-row>
-    </el-card>
-
-  </div>
+    <p class="page-tip">
+        风险提示： 保证金交易是杠杆产品，存在较高的风险，不适合所有投资者。决定参与交易前 ，您应该谨慎考虑您的投资目标、经验等级及风险承受能力。您可能会亏损部分或者全部资金。交易者应该清楚的了解与交易相关联的所有风险，如果您有任何疑问，可在必要时向独立的金融顾问征询意见。过去的交易成绩并不代表以后的交易成绩，牛人榜所列信息仅供参考，不构成投资建议，也不代表任何形式的推荐或诱导信息。
+    </p>
+</div>
 </template>
-<script>
-import { mapGetters } from 'vuex';
-import echarts from 'echarts';
-require('echarts/theme/macarons'); // echarts theme
-import { debounce } from '@/utlis';
-export default {
-  name: 'Home',
-  data() {
-    return {
-      chart: null,
-      resizeHandler: null,
-      radio1: '今日',
-      datevalue1: ''
-    };
-  },
-  computed: {
-    ...mapGetters([
-        'sidebarOpened'
-      ])
-  },
-  watch: {
-    sidebarOpened() {
-      this.resizeHandler();
-    }
-  },
-  methods: {
-    initChart() {
-      this.chart = echarts.init(document.getElementById('home-traffic-chart'),'macarons');
-      this.chart.setOption({
-            grid: {
-              left: '50px',
-              right: '20px',
-              top: '10px',
-              bottom: '35px'
-            },
-            xAxis: {
-              data: ['1月', '2月', '3月', '4月', '5月', '6月','7月', '8月', '9月', '10月', '11月', '12月']
-            },
-            yAxis: {},
-            series: [{
-                name: '销量',
-                type: 'bar',
-                data: [5888, 3838, 15880, 12888, 18888, 16888,5888, 3838, 15880, 12888, 18888, 16888]
-            }]
-      });
-
-    },
-    initResizeEvent() {
-      window.addEventListener('resize', this.resizeHandler);
-    }
-  },
-  mounted() {
-    const _this = this;
-    _this.resizeHandler = debounce(() => {
-      if (_this.chart) {
-        _this.chart.resize();
-      }
-    }, 100);
-    _this.initChart();
-    _this.initResizeEvent();
-  }
-};
-</script>
+<style>
+@import "../../assets/css/style.css";
+</style>
 <style lang="scss">
-.box-card {
-  border: 0;
-  margin-bottom: 24px;
-  .el-card__header {
-      padding-left: 12px;
-      padding-right: 12px;
-  }
-  .el-card__body{
-    padding: 12px;
-  }
-  .num {
-    font-size: 30px;
-    margin-bottom: 20px;
-  }
-  .el-divider--horizontal{
-     margin: 8px 0;
-  }
-  .bot {
-    font-size: 14px;
-  }
-  .traffic-title{
-    margin: 0;
-    margin-bottom: 10px;
-  }
-  .traffic-li{
-    height: 24px;
-    line-height: 24px;
-    font-size: 14px;
+.infinite-list-wrapper{
+    height: 400px;
+}
+.tips{
+    text-align: center;
     margin-top: 10px;
-  }
-  .traffic-num{
-    width: 24px;
-    height: 24px;
-    line-height: 24px;
-    margin-right: 8px;
-    &.hot{
-      background-color: rgba($color: #209e91, $alpha: 0.8) ;
-      color: #FFFFFF;
+}
+.main{
+    background: #fff;
+}
+.load-more{
+    padding-bottom: 20px;
+    .load-more-btn{
+        padding: 10px 40px;
+        margin: 20px auto;
+        display: block;
+        border-radius: 6px;
     }
-  }
+}
+table tbody tr:nth-child(2n+1) {
+    background: #fbfbfb;
+}
+.names-container{
+    padding-top: 20px;
+    display: flex;
+    .avator-area{
+        width: 130px;
+    }
+    .info{
+        flex: 1;
+        padding-top: 10px;
+    }
+}
+.page-tip{
+    font-size: 14px;
+    color: #AEAEAE;
+    line-height: 24px;
+    padding: 20px 20px 40px;
 }
 </style>
+<style scoped>
+.chart_bg_area{
+    padding: 8px 8px 4px;
+    margin-top: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,.1);
+    background: #fff;
+}
+</style>
+<script>
+import { getHomeTopRank } from '@/service/user';
+import { Base64 } from 'js-base64';
+import md5 from 'js-md5';
+import format from 'date-fns/format';
+
+export default {
+    data() {
+        return {
+            tableData: [],
+            pageNo: 1,
+            currentMenu: '0',
+            accountType: '0',
+            loading: false,
+            noMore: false,
+            showTip: true
+        };
+    },
+    computed: {
+      disabled () {
+        return this.loading || this.noMore;
+      }
+    },
+    mounted() {
+        this.test();
+        this.getData();
+    },
+    methods: {
+        showMenu(item) {
+            this.currentMenu = item;
+            this.accountType = item;
+            this.pageNo = 1;
+            this.tableData = [];
+            this.getData();
+        },
+        close_tips() {
+            this.showTip = false;
+        },
+        turnToRank() {
+            this.$router.push({ path: '/rank' });
+        },
+        gotoLook(){
+            console.log('gotoLook');
+        },
+        getData() {
+            this.loading = true;
+            getHomeTopRank({
+                accountType: this.accountType,
+                pageNo: this.pageNo,
+                pageSize: 10
+            }).then((data) => {
+                if (data && data.length) {
+                    this.$refs.infiniteListWrapperMain.scrollTop = this.$refs.infiniteListWrapperMain.scrollTop - 140;
+                    this.pageNo += 1;
+                    data.map((item) => {
+                        this.doData(item);
+                        return item;
+                    });
+                    this.tableData = this.tableData.concat(data);
+                    this.loading = false;
+                } else {
+                    this.loading = false;
+                    this.noMore = true;
+                }
+            });
+        },
+        doData(data) {
+            const url = 'http://mt4.ecn.cc/';
+            if (data.header_icon) {
+                const urlStr1 = data.header_icon.replace(/\\/g, "/");
+                data.header_icon = `${url}${urlStr1}`;
+            }
+
+            if (data.trader_icon) {
+                const urlStr2 = data.trader_icon.replace(/\\/g, "/");
+                data.trader_icon = `${url}${urlStr2}`;
+            }
+            
+            if (data.usergroup_icon) {
+                const urlStr3 = data.usergroup_icon.replace(/\\/g, "/");
+                data.usergroup_icon = `${url}${urlStr3}`;
+            }
+        },
+        showDetailItem(data) {
+            this.$router.push({ path: '/detail', query: { accountNo: data.accountno } });
+        },
+        test() {
+            const res = Base64.encode('{"dictName":"性别"}');
+            console.log(res);
+            const dateTime = format(new Date(), 'yyyyMMddHHmmss');
+            console.log(dateTime);
+
+            const obj = {
+                res,
+                dateTime
+            };
+            const grf = md5(JSON.stringify(obj));
+            console.log(grf);
+        }
+    }
+};
+</script>

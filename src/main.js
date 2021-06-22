@@ -33,7 +33,6 @@ Vue.use(ElementUI, { size: 'small' });
 // import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 // Vue.use(ElementUI, { locale })
 
-
 Vue.config.productionTip = false;
 
 new Vue({

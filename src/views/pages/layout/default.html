@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>{$title}</title>
+		{include file="common/meta" /}
+	</head>
+	<body>
+		<div class="flex">
+		<div class="left_nav">
+			<div class="logo">
+				<img src="/static/img/logo.png">
+			</div>
+			<ul>
+				<a href="{:url('index/index')}" class="active">
+					<li class="index">首页</li>
+				</a>
+				<a href="#">
+					<li class="paihang">排行榜</li>
+				</a>
+				<a href="{:url('center/info')}">
+					<li class="mycenter">个人中心</li>
+				</a>
+			</ul>
+		</div>
+		<div class="right">
+			<div class="header">
+				<input type="search" placeholder="搜索" id="top_search">
+				<ul class="top_menu">
+					<li><a href="javascript:void(0)" onclick="show_child_menu(this)"><img class="money" src="/static/img/ico_money.png"></a>
+						<div class="child_menu">
+							<div class="item"><a href="#">我的交易账户(<code>0</code>)</a></div>
+							<div class="item"><a class="layui-btn layui-btn-sm layui-btn-radius">账户管理</a></div>
+						</div>
+					</li>
+					<li><a href="javascript:void(0)" onclick="show_child_menu(this)"><img class="ring" src="/static/img/ico_ring.png"></a>
+						<div class="child_menu">
+							<div class="item"><a href="#">交易动态(<code>0</code>)</a></div>
+							<div class="item"><a href="#">账户信息(<code class="primary">0</code>)</a></div>
+							<div class="item"><a class="layui-btn layui-btn-sm layui-btn-radius">账户管理</a></div>
+						</div>
+					</li>
+					<li><a href="#"><img class="user_avartar" src="/static/img/user_avartar.png"></a></li>
+					<li><a href="{:url('user/logout')}">退出</a></li>
+				</ul>
+			</div>
+			<div class="main">
+				{__CONTENT__}
+				
+				<div class="clearfixed"></div>
+				<div class="bottom_tips">
+					<p>风险提示：</p> 
+					<p>保证金交易是杠杆产品，存在较高的风险，不适合所有投资者。决定参与交易前 ，您应该谨慎考虑您的投资目标、经验等级及风险承受能力。您可能会亏损部分或者全部资金。交易者应该清楚的了解与交易相关联的所有风险，如果您有任何疑问，可在必要时向独立的金融顾问征询意见。过去的交易成绩并不代表以后的交易成绩，牛人榜所列信息仅供参考，不构成投资建议，也不代表任何形式的推荐或诱导信息。</p>
+				</div>
+			</div>
+		</div>
+		</div>
+		<div class="footer">
+			<div class="hd">
+				<ul>
+					<li><a href="#">关于我们</a></li>
+					<li><a href="#">服务条款</a></li>
+					<li><a href="#">意见反馈</a></li>
+					<li><a href="#">帮助中心</a></li>
+				</ul>
+				<p>量化街客服：8001 </p>
+				<p>工作时间：周一到周五 09:00-18:00</p>
+			</div>
+			<div class="bd">
+				<p>NiuFx.com是Rockest公司旗下品牌，Rockest (HK) Company Limited为香港特别行政区政府工商注册企业，企业编号：2854643</p>
+			</div>
+		</div>
+	</body>
+</html>

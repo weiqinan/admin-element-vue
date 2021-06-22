@@ -23,6 +23,17 @@
  */
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+
+// const originalPush = VueRouter.prototype.push;
+// VueRouter.prototype.push = function push(location, onResolve, onReject) {
+//   if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject);
+//   return originalPush.call(this, location).catch(err => err);
+// };
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err);
+};
+
 Vue.use(VueRouter);
 
 // 引入Index框架
@@ -47,6 +58,33 @@ export const constantRoutes = [
     component: () => import('@/views/Login'),
     hidden: true
   },
+  
+  {
+    path: '/regist',
+    meta: {
+      title: '注册'
+    },
+    component: () => import('@/views/Login/regist'),
+    hidden: true
+  },
+
+  {
+    path: '/forgetpass',
+    meta: {
+      title: '忘记密码'
+    },
+    component: () => import('@/views/Login/forgetpass'),
+    hidden: true
+  },
+
+//   {
+//     path: '/mes',
+//     meta: {
+//       title: '消息中心'
+//     },
+//     component: () => import('@/views/Account/mes'),
+//     hidden: true
+//   },
 
   {
     path: '/404',
@@ -59,47 +97,72 @@ export const constantRoutes = [
 
   {
     path: '/',
-    redirect: '/home',
+    redirect: '/main',
     component: LayoutIndex,
     meta: { title: '首页', icon: 'home' },
     children: [
+    //   {
+    //     path: 'home',
+    //     component: () => import('@/views/Home'),
+    //     name: 'home',
+    //     meta: { title: '主控台', icon: 'control', belongTopMenu: '/' }
+    //   },
       {
-        path: 'home',
-        component: () => import('@/views/Home'),
-        name: 'home',
-        meta: { title: '主控台', icon: 'control', belongTopMenu: '/' }
+        path: 'main',
+        component: () => import('@/views/Home/index'),
+        name: 'main',
+        meta: { title: '首页', icon: 'home', belongTopMenu: '/' }
       },
       {
-        path: 'monitor',
-        component: () => import('@/views/Home'),
-        name: 'monitor',
-        meta: { 
-            title: '自定义面包屑',
-            icon: 'monitoring',
-            belongTopMenu: '/',
-            breadcrumb: [
-              {
-                meta: { title: '自定义面包屑' }
-              },
-              {
-                meta: { title: '后台首页' },
-                linkpath: '/home'
-              },
-              {
-                meta: { title: '网页小功能' },
-                linkpath: 'http://www.wyxgn.com'
-              },
-              {
-                meta: { title: '监控页' }
-              }
-            ]
-        }
+        path: 'rank',
+        component: () => import('@/views/Rank'),
+        name: 'rank',
+        meta: { title: '排行榜', icon: 'chart', belongTopMenu: '/' }
       },
       {
-        path: 'http://admin-element-vue.liqingsong.cc',
-        name: 'document',
-        meta: { title: '使用文档', icon: 'pagedetails' }
+        path: 'detail',
+        component: () => import('@/views/Detail'),
+        name: 'detail',
+        hideMark: true,
+        meta: { title: '单个排行榜', icon: 'chart', belongTopMenu: '/' }
+      },
+      {
+        path: 'account',
+        component: () => import('@/views/Account'),
+        name: 'account',
+        meta: { title: '用户中心', icon: 'control', belongTopMenu: '/' }
       }
+    //   {
+    //     path: 'monitor',
+    //     component: () => import('@/views/Home'),
+    //     name: 'monitor',
+    //     meta: { 
+    //         title: '自定义面包屑',
+    //         icon: 'monitoring',
+    //         belongTopMenu: '/',
+    //         breadcrumb: [
+    //           {
+    //             meta: { title: '自定义面包屑' }
+    //           },
+    //           {
+    //             meta: { title: '后台首页' },
+    //             linkpath: '/home'
+    //           },
+    //           {
+    //             meta: { title: '网页小功能' },
+    //             linkpath: 'http://www.wyxgn.com'
+    //           },
+    //           {
+    //             meta: { title: '监控页' }
+    //           }
+    //         ]
+    //     }
+    //   },
+    //   {
+    //     path: 'http://admin-element-vue.liqingsong.cc',
+    //     name: 'document',
+    //     meta: { title: '使用文档', icon: 'pagedetails' }
+    //   }
     ]
   }
 
@@ -143,7 +206,7 @@ console.log(JSON.stringify(consoleLogRouteRoles(asyncRoutes, 1)));
 */
 
 const createRouter = () => new VueRouter({
-  // mode: 'history', // 启用的话就是去除#
+  mode: 'history', // 启用的话就是去除#
   scrollBehavior: () => ({ y: 0 }),
   base: process.env.BASE_URL,
   routes: constantRoutes

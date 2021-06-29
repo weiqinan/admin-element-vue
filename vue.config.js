@@ -9,24 +9,22 @@ function resolve(dir) {
 }
 
 module.exports = {
-  publicPath: '/',
+  publicPath: './',
   outputDir: 'dist',
   productionSourceMap: false,
   devServer: {
-      port: 8081
+      port: 8081,
       // 配置反向代理
-      /*
+      disableHostCheck: true,
       proxy: {
-          '/api': {
-            target: '<url>',
-            ws: true,
-            changeOrigin: true
-          },
-          '/foo': {
-            target: '<other_url>'
-          }
-      } 
-      */
+        '/DEFAULT': {
+            target: 'http://mt4.ecn.cc/',
+            changeOrigin: true,
+            pathRewrite: {
+                '^/DEFAULT': '/'
+            }
+        }
+      }
   },
   // 修改webpack的配置
   configureWebpack: {

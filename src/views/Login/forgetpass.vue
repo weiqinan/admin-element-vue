@@ -64,12 +64,24 @@
 </style>
 <script>
 import { reSetPassWord, getUserInfo, setPassWord } from '@/service/user';
+import { isEmail } from '@/utlis/rules';
 
 export default {
     data() {
         const checkPass = (rule, value, callback) => {
             if (value !== this.ruleForm.newPassword) {
                 return callback(new Error(`要与新密码一致`));
+            } else {
+                callback();
+            }
+        };
+        const checkEmail = (rule, value, callback) => {
+            if (value) {
+                if (!isEmail(value)) {
+                    callback(new Error('请输入正确的邮箱格式'));
+                } else {
+                    callback();
+                }
             } else {
                 callback();
             }
@@ -84,9 +96,9 @@ export default {
             },
             userId: '',
             rules: {
-                userid: [
-                    { required: true, message: '请输入邮箱账号', trigger: 'blur' }
-                ],
+                userid: [{
+                    validator: checkEmail
+                }],
                 newPassword: [
                     { required: true, message: '请输入您的新密码', trigger: 'blur' },
                     { min: 4, max: 25, message: '4-25位，不含有中文以及中英文单双引号', trigger: 'blur' }

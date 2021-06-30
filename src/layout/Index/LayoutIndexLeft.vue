@@ -86,6 +86,7 @@ export default {
   display: flex;
   flex-direction: column;
   width: $leftSideBarWidth;
+  min-width: $leftSideBarWidth;
   height: 100vh;
   background-color: #F6F8FC;
 //   background-color: #222834;

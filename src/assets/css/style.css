@@ -209,7 +209,7 @@ border-radius: 16.25px; padding-left: 32px; box-sizing: border-box; font-size: 1
 .index_body .hd .tab li.active{color: #744DFE;}
 
 .index_body .hd .tab li.active:after{content: ''; position: absolute;bottom: 0; width: 100%; left: 0; right: 0; height: 3px; background-color:#744DFE;}
-.index_body .bd table{ width: 100%;}
+.index_body .bd table{ width: 100% !important;}
 .index_body .bd table thead th{line-height: 3;}
 /* padding-bottom: 2rem; */
 .index_body .bd table th,.index_body .bd table td{text-align: center;color:#364064;}
@@ -346,6 +346,7 @@ button.change_pass+#defult_pass{font-size: .8rem; color: #A7A7A7;}
     background: #6E4FF4;
     color: #fff;
 }
+
 
 
 

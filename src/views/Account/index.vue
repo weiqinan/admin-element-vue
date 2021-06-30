@@ -24,7 +24,7 @@
                         <li :class="[currentShow === 'userInfoShowMark' ? 'active': '']" @click="showItem('userInfoShowMark')"><a>个人资料</a></li>
                         <li :class="[currentShow === 'setpassShowMark' ? 'active': '']" @click="showItem('setpassShowMark')"><a>安全设置</a></li>
                     </ul>
-                    <span class="edit-font" v-if="editMark">修改</span>	
+                    <!-- <span class="edit-font" v-if="editMark">修改</span>	 -->
                 </div>
 
                 <User-info v-if="currentShow === 'userInfoShowMark'" @addAccount="addAccount"></User-info>
@@ -113,7 +113,7 @@ export default {
         return {
             pageMode: 'account',
             currentMenu: 'account',
-            editMark: false,
+            // editMark: false,
             currentShow: 'userInfoShowMark',
             accountType: 'add',
             accountData: { name: 'gegeg' },
@@ -145,7 +145,7 @@ export default {
                 });
             }
 
-            this.editMark = false;
+            // this.editMark = false;
         },
         showItem(item) {
             this.currentShow = item;
@@ -160,10 +160,10 @@ export default {
                 });
             }
 
-            this.editMark = false;
+            // this.editMark = false;
         },
         addAccount() {
-            this.editMark = true;
+            // this.editMark = true;
         },
         manageAccount(item) {
             this.accountType = 'add';

@@ -9,7 +9,6 @@
                         <li @click="showMenu('0')" :class="[currentMenu === '0' ? 'active': '']">模拟账户</li>
                     </ul>
                 </div>
-                <a href="#">更多</a>
             </div>
         </div>
         <div class="charts-container">
@@ -47,18 +46,60 @@
                                 fixed
                                 prop="name"
                                 label="基本信息"
-                                width="280">
+                                width="240">
                                 <template slot-scope="{row, $index}">
                                     <div class="names-container" @click="showDetailItem(row)">
-                                        <div class="avator-area">
+                                        <el-popover
+                                            v-if="hasLogin"
+                                            placement="right"
+                                            width="400"
+                                            trigger="hover">
+                                            <div class="item-popup-area">
+                                                <p class="num">总盈利率第<span class="color">{{$index + 1}}</span>名</p>
+                                                <img class="avartar-item" :src="row.header_icon" />
+                                                <div class="info">
+                                                    <div class="username jieq">{{row.usernickname}}</div>
+                                                    <div class="action">
+                                                        <img :src="row.usergroup_icon" />
+                                                        <img :src="row.trader_icon" />
+                                                    </div>
+                                                </div>
+                                                <p class="font-font">交易策略：{{row.tradestraregy_desc}}</p>
+                                                <ul class="item-ul">
+                                                    <li>
+                                                        <p class="num">$ {{row.profit}}</p>
+                                                        <p class="font">总盈亏</p>
+                                                    </li>
+                                                    <li>
+                                                        <p class="num">{{row.win_rate}} %</p>
+                                                        <p class="font">准确率</p>
+                                                    </li>
+                                                    <li>
+                                                        <p class="num">{{row.profit_rate_inner}} %</p>
+                                                        <p class="font">盈利率</p>
+                                                    </li>
+                                                    <li>
+                                                        <p class="num">{{row.maxdrawdown_rate}} %</p>
+                                                        <p class="font">净值回撤率</p>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="avator-area" slot="reference">
+                                                <span class="xuhao">{{$index + 1}}</span>
+                                                <img class="avartar" :src="row.header_icon" />
+                                            </div>
+                                        </el-popover>
+
+                                        <div class="avator-area" v-else>
                                             <span class="xuhao">{{$index + 1}}</span>
-                                            <img class="avartar" v-if="row.header_icon" :src="row.header_icon" />
+                                            <img class="avartar" :src="row.header_icon" />
                                         </div>
                                         <div class="info">
+                                            <!-- {{row.accountnickname}} -->
                                             <div class="username jieq">{{row.usernickname}}</div>
                                             <div class="action">
-                                                <img v-if="row.usergroup_icon" :src="row.usergroup_icon" />
-                                                <img v-if="row.trader_icon" :src="row.trader_icon" />
+                                                <img :src="row.usergroup_icon" />
+                                                <img :src="row.trader_icon" />
                                             </div>
                                         </div>
                                     </div>
@@ -67,7 +108,7 @@
                             <el-table-column
                                 prop="symbol"
                                 label="专注品种"
-                                min-width="120">
+                                min-width="100">
                                 <template slot-scope="{row}">
                                     <span v-if="row.symbol">{{row.symbol}}</span>
                                     <span v-else>--</span>
@@ -76,7 +117,7 @@
                             <el-table-column
                                 prop="profit_rate"
                                 label="总盈亏"
-                                min-width="120">
+                                min-width="100">
                                 <template slot-scope="{row}">
                                     <span class="code">{{row.profit_rate}} %</span>
                                 </template>
@@ -84,7 +125,7 @@
                             <el-table-column
                                 prop="years"
                                 label="年龄"
-                                min-width="120">
+                                min-width="60">
                                 <template slot-scope="{row}">
                                     <span class="code">{{row.years}}</span>
                                 </template>
@@ -92,7 +133,7 @@
                             <el-table-column
                                 prop="avgprofit_rate"
                                 label="月盈利率"
-                                min-width="120">
+                                min-width="100">
                                 <template slot-scope="{row}">
                                     <span class="code">{{row.avgprofit_rate}} %</span>
                                 </template>
@@ -100,7 +141,7 @@
                             <el-table-column
                                 prop="maxdrawdown_rate"
                                 label="最大浮亏"
-                                min-width="120">
+                                min-width="100">
                                 <template slot-scope="{row}">
                                     <span class="code">{{row.maxdrawdown_rate}} %</span>
                                 </template>
@@ -108,7 +149,7 @@
                             <el-table-column
                                 prop="name"
                                 label="走势图"
-                                min-width="260">
+                                min-width="230">
                                 <template slot-scope="{row}">
                                     <div class="chart_bg_area">
                                         <img class="phb_zhexiantu" @click="gotoLook(row.userid)" src="../../assets/img/chart_bg.png" />
@@ -141,6 +182,7 @@ table tbody tr:nth-child(2n+1) {
     background: #fbfbfb;
 }
 .names-container{
+    cursor: pointer;
     display: flex;
     .avator-area{
         width: 130px;
@@ -182,18 +224,78 @@ table tbody tr:nth-child(2n+1) {
     text-align: center;
     padding-top: 30px;
 }
+.item-popup-area{
+    .avartar-item{
+        width: 80px;
+        margin: 0 auto;
+        display: block;
+        height: 80px;
+        margin-top: 40px;
+        margin-bottom: 10px;
+    }
+    .num{
+        font-size: 14px;
+        color: #000;
+        .color{
+            color: #EA5B55;
+        }
+    }
+    .info{
+        text-align: center;
+        font-size: 14px;
+        margin-bottom: 10px;
+        .username{
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .action{
+            display: inline-block;
+            vertical-align: middle;
+            img{
+                display: inline-block;
+                vertical-align: middle;
+                width: 16px;
+            }
+        }
+    }
+    .font-font{
+        text-align: center;
+        margin-bottom: 20px;
+        color: #979797;
+    }
+    .item-ul{
+        li{
+            float: left;
+            width: 50%;
+            text-align: center;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+            .num{
+                color: #78DFB3;
+            }
+            .font{
+                color: #979797;
+            }
+        }
+        li:first-child{
+            border-right: 1px solid #ddd;
+        }
+    }
+}
 </style>
 <style scoped>
 .chart_bg_area{
     padding: 8px 8px 4px;
+    margin: 0 auto;
     margin-top: 10px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,.1);
     background: #fff;
+    width: 214px;
 }
 </style>
 <script>
-import { getTraders, getTopRank } from '@/service/user';
+import { getTraders, getTopRank, getUserAccountBaseStatInfo } from '@/service/user';
 
 export default {
     components: {
@@ -263,7 +365,8 @@ export default {
             tableData: [],
             loading: false,
             noMore: false,
-            pageNo: 1
+            pageNo: 1,
+            hasLogin: false
         };
     },
     computed: {
@@ -273,6 +376,10 @@ export default {
     },
     mounted() {
         this.getBasic();
+        const userId = localStorage.getItem('webUserId') || '';
+        if(userId) {
+            this.hasLogin = true;
+        }
     },
     methods: {
         showMenu(item) {
@@ -341,7 +448,7 @@ export default {
                 }
             });
         },
-        doData(data) {
+        async doData(data) {
             const url = 'http://mt4.ecn.cc/';
             if (data.header_icon) {
                 const urlStr1 = data.header_icon.replace(/\\/g, "/");
@@ -357,6 +464,18 @@ export default {
                 const urlStr3 = data.usergroup_icon.replace(/\\/g, "/");
                 data.usergroup_icon = `${url}${urlStr3}`;
             }
+            const infodata = await this.getInfo(data);
+            if (infodata) {
+                data.profit = infodata.profit;
+                data.win_rate = infodata.winrate;
+                data.tradestraregy_desc = infodata.tradestraregy_desc;
+                data.profit_rate_inner = infodata.profit_rate;
+                data.maxdrawdown_rate = infodata.maxdrawdown_rate;
+            }
+        },
+        async getInfo(data) {
+            const item = await getUserAccountBaseStatInfo({accountNo: data.accountno});
+            return item;
         }
     }
 };

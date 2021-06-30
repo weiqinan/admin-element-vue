@@ -2,7 +2,8 @@
     <div>
         <div id="indexlayout">
             <layout-index-left />
-            <div id="indexlayout-right" :class="{'fiexd-header': siteFiexdHeader}">
+             <!-- :class="{'fiexd-header': siteFiexdHeader}" -->
+            <div id="indexlayout-right">
                 <layout-index-right-top />
                 <div class="indexlayout-right-main" >
                 <app-main />

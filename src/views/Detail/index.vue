@@ -725,8 +725,9 @@
         <div class="charts-container">
             <div class="charts-title-area">
                 <div class="title">月分析报告</div>
-                <div :class="['btn-item item', index === 3 ? 'active': '']" v-for="(item, index) in yearArr" :key="index">{{item}}</div>
+                <div :class="['btn-item item', currentYearIndex === index ? 'active': '']" v-for="(item, index) in yearArr" @click="changYearData(index)" :key="index">{{item}}</div>
             </div>
+            <div class="el-message el-message--error is-closable" v-if="yearDataFont" style="position: relative; width: 440px;"><i class="el-message__icon el-icon-error"></i><p class="el-message__content">{{yearDataFont}}</p></div>
             <div id="chartdemo" style="height:500px"></div>
         </div>
 
@@ -983,7 +984,10 @@ import { getStatInfo, getTradeStatForPeriod, getAdvStatTradeInfo, getAdvStatSumm
 export default {
     data() {
         return {
-            yearArr: ['2016', '2017', '2018', '2019'],
+            yearArr: ['2021', '2020', '2019', '2018'],
+            isLoadYear: true,
+            currentYearIndex: 0,
+            yearDataFont: '',
             Advanced: ['交易', '概述', '破产风险', '时间'], // 'MAE/MFE'
             testArr3: ['增长率', '余额', '利润', '资金回撤'],
             testArr4: ['统计', '摘要'],
@@ -999,34 +1003,6 @@ export default {
                 if (columnIndex === 11) {
                     return 'background: #FFEDF9';
                 }
-            },
-            option: {
-                grid: {
-                    left: '50px',
-                    right: '20px',
-                    top: '10px',
-                    bottom: '35px'
-                },
-                xAxis: {
-                    data: ['1月', '2月', '3月', '4月', '5月', '6月','7月', '8月', '9月', '10月', '11月', '12月']
-                },
-                tooltip: {
-                    trigger: 'axis',
-                    axisPointer: {
-                        type: 'cross',
-                        label: {
-                            backgroundColor: '#6a7985'
-                        }
-                    }
-                },
-                yAxis: {},
-                series: [{
-                    name: '销量',
-                    type: 'bar',
-                    barWidth: 30,
-                    color: '#337ab7',
-                    data: [5888, 3838, 15880, 12888, 18888, 16888,5888, 3838, 15880, 12888, 18888, 16888]
-                }]
             },
             tradeStatForPeriodDataLoading: false,
             tradeStatForPeriodData: [],
@@ -1049,6 +1025,7 @@ export default {
             tradeExposureData: [], // 敞口
             otherAccountsData: [], // 其他系统板块
             timeData: [], // 高级统计 时间
+            reportForYearData: [],
             historyOrdersDataConfig: {
                 pageNum: 1
             }
@@ -1195,9 +1172,17 @@ export default {
             this.tradeExposureDataLoading = false;
         },
         // 月分析报告
-        async getAnalysisReportForYear() {
-            const data = await getAnalysisReportForYear({ accountNo: this.$route.query.accountNo,  year: 2020 });
-            console.log(data);
+        async getAnalysisReportForYear(year) {
+            const data = await getAnalysisReportForYear({ accountNo: this.$route.query.accountNo,  year });
+            // const data = await getAnalysisReportForYear({ accountNo: 448108,  year });
+            this.isLoadYear = false;
+            if (data && data.length) {
+                this.yearDataFont = '';
+                this.reportForYearData = data;
+                this.initChart();
+            } else {
+                this.yearDataFont = `${year}年数据暂无，正在加紧收集中，请查看其它年份`;
+            }
         },
         // 其他系统板块
         async getOtherAccounts() {
@@ -1213,9 +1198,63 @@ export default {
         formatterTwo(row) {
             return row.closeprice.toFixed(2);
         },
+        changYearData(index) {
+            console.log(index);
+            if (this.isLoadYear) {
+                return;
+            }
+            this.currentYearIndex = index;
+            this.getAnalysisReportForYear(this.yearArr[this.currentYearIndex]);
+        },
         initChart() {
             this.chart = echarts.init(document.getElementById('chartdemo'));
-            const option = this.option;
+
+            const data = this.reportForYearData;
+            const xArr = [];
+            const yArr = [];
+            data.map((item) => {
+                xArr.push(item.onmonth);
+                yArr.push(item.profit_rate);
+                return item;
+            });
+
+            const option = {
+                grid: {
+                    left: '50px',
+                    right: '20px',
+                    top: '10px',
+                    bottom: '35px'
+                },
+                xAxis: {
+                    // data: ['1月', '2月', '3月', '4月', '5月', '6月','7月', '8月', '9月', '10月', '11月', '12月']
+                    data: xArr
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        label: {
+                            backgroundColor: '#6a7985'
+                        }
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: '利润率',
+                    min: 0,
+                    axisLabel: {
+                        formatter: '{value} %'
+                    }
+                },
+                series: [{
+                    name: '利润率',
+                    type: 'bar',
+                    barWidth: 30,
+                    color: '#337ab7',
+                    data: yArr
+                    // data: [5888, 3838, 15880, 12888, 18888, 16888,5888, 3838, 15880, 12888, 18888, 16888]
+                }]
+            };
             this.chart.setOption(option);
         },
         initResizeEvent() {
@@ -1648,6 +1687,14 @@ export default {
         }
     },
     async mounted() {
+
+        // this.$message({
+        //   showClose: true,
+        //   message: '恭喜你，这是一条成功消息',
+        //   type: 'error',
+        //   duration: 0
+        // });
+
         const _this = this;
         await this.getStatInfo();
 
@@ -1661,13 +1708,11 @@ export default {
         // 交易活动栏目
         this.getTradeOpenedOrders();
 
-        // 月分析报告
-        this.initChart();
-
         // 其他系统板块
         this.getOtherAccounts();
 
-        this.getAnalysisReportForYear();
+        // 月分析报告
+        this.getAnalysisReportForYear('2021');
         _this.resizeHandler = debounce(() => {
             if (_this.chart) {
                 _this.chart.resize();

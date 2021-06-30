@@ -270,7 +270,7 @@
                     <el-form-item>
                         <div class="bottom_item">
                             <button v-if="type=== 'add'" type="button" @click="submit" class="primary" :loading="loading">保存</button>
-                            <button v-else type="button" @click="updateAccount" class="primary" :loading="loading">保存 - 修</button>
+                            <button v-else type="button" @click="updateAccount" class="primary" :loading="loading">保存</button>
                             <button type="button" class="default" @click="cancel">取消</button>
                         </div>
                     </el-form-item>

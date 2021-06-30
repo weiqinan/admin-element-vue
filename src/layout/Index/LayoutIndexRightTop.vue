@@ -136,6 +136,7 @@ export default {
           type: 'success'
         });
         this.logoutShow = false;
+        location.reload();
         // this.$router.push('');
     //   try {
     //       const { isExternal, siteLoginRouter } = await this.$store.dispatch('user/logout');

@@ -90,6 +90,17 @@ export function getUserInfo(data, config) {
     });
 }
 
+export function updateUser(data, config) {
+    const showLoading = config ? config.showLoading : false;
+    return request({
+        url: aspx,
+        method: 'POST',
+        serviceName: 'MT4_API.Services.UserService.UpdateUser',
+        data,
+        showLoading
+    });
+}
+
 // 设置密码
 export function setPassWord(data) {
     return request({
@@ -201,6 +212,16 @@ export function getTopRank(data) {
         url: aspx,
         method: 'POST',
         serviceName: 'MT4_API.Services.QueryService.GetTopRank',
+        data,
+        showLoading: false
+    });
+}
+
+export function getUserAccountBaseStatInfo(data) {
+    return request({
+        url: aspx,
+        method: 'POST',
+        serviceName: 'MT4_API.Services.QueryService.GetUserAccountBaseStatInfo',
         data,
         showLoading: false
     });

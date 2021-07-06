@@ -29,20 +29,20 @@
                             <img class="money-ico" src="../../assets/img/ico_money.png" />
                         </span>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item @click.native="turnToAccount">我的交易账户（0）</el-dropdown-item>
+                            <el-dropdown-item @click.native="turnToAccount">我的交易账户</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
 
                     <!-- <router-link class="index-layout-message" to="/account?mode=mes" title="消息"> -->
-                    <el-dropdown placement="bottom">
+                    <el-dropdown placement="bottom" @visible-change="test">
                         <span class="el-dropdown-link">
                             <!-- <svg-icon icon-class="message" /> -->
                             <img class="money-ico" src="../../assets/img/ico_ring.png" />
                             <!-- <el-badge :value="msgtotal" :max="10" class="index-layout-message-item"></el-badge> -->
                         </span>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item  @click.native="turnToMes(0)">交易动态 （0）</el-dropdown-item>
-                            <el-dropdown-item  @click.native="turnToMes(1)">账户信息 （6）</el-dropdown-item>
+                            <el-dropdown-item  @click.native="turnToMes(0)">交易动态 （{{tradeLength}}）</el-dropdown-item>
+                            <el-dropdown-item  @click.native="turnToMes(1)">账户信息 （{{accountLength}}）</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                     <!-- </router-link> -->
@@ -80,6 +80,7 @@ import { mapGetters } from 'vuex';
 // import Breadcrumb from '@/components/Breadcrumb';
 // import AppLink from '@/components/Link';
 import { getBelongTopMenuPath } from '@/utlis/permission';
+import { getUserAccountMessage, getUserTradeMessage } from '@/service/user';
 export default {
   name: 'LayoutIndexRightTop',
   components: {
@@ -89,7 +90,10 @@ export default {
   data() {
       return {
           input2: '',
-          logoutShow: false
+          accountLength: 0,
+          tradeLength: 0,
+          logoutShow: false,
+          userId: ''
       };
   },
   computed: {
@@ -110,6 +114,7 @@ export default {
   },
   created() {
       const userId = localStorage.getItem('webUserId') || '';
+      this.userId = userId;
       if (userId) {
           this.logoutShow = true;
       } else {
@@ -128,6 +133,30 @@ export default {
     },
     turnToAccount() {
         this.$router.push({ path: '/account?currentMenu=manage' });
+    },
+    test(val) {
+        if (val && this.userId) {
+            this.getUserAccountMessage();
+            this.getUserTradeMessage();
+        }
+    },
+    getUserAccountMessage() {
+        getUserTradeMessage({ userId: this.userId }).then((data) => {
+            if (data && data.length) {
+                this.accountLength = data.length;
+            } else {
+                this.accountLength = 0;
+            }
+        });
+    },
+    getUserTradeMessage() {
+        getUserAccountMessage({ userId: this.userId }).then((data) => {
+            if (data && data.length) {
+                this.tradeLength = data.length;
+            } else {
+                this.tradeLength = 0;
+            }
+        });
     },
     async logout() {
         localStorage.setItem('webUserId', '');

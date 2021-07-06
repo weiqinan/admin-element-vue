@@ -339,6 +339,56 @@ export function getOtherAccounts(data) {
     });
 }
 
+// 账户消息
+export function getUserAccountMessage(data) {
+    return request({
+        url: aspx,
+        method: 'POST',
+        serviceName: 'MT4_API.Services.LogService.GetUserAccountMessage',
+        data
+    });
+}
+// 发送邮箱验证码
+export function sendEmailVerifyCode(data) {
+    return request({
+        url: aspx,
+        method: 'POST',
+        serviceName: 'MT4_API.Services.UserService.SendEmailVerifyCode',
+        data
+    });
+}
+// 交易消息
+export function getUserTradeMessage(data) {
+    return request({
+        url: aspx,
+        method: 'POST',
+        serviceName: 'MT4_API.Services.LogService.GetUserTradeMessage',
+        data
+    });
+}
+
+// 消息状态
+export function updateMessageViewed(data) {
+    return request({
+        url: aspx,
+        method: 'POST',
+        serviceName: 'MT4_API.Services.LogService.UpdateMessageViewed',
+        data
+    });
+}
+
+// 删除功能
+export function deleteMessagge(data, config) {
+    const showLoading = config ? config.showLoading : false;
+    return request({
+        url: aspx,
+        method: 'POST',
+        serviceName: 'MT4_API.Services.LogService.DeleteMessagge',
+        data,
+        showLoading
+    });
+}
+
 
 
 

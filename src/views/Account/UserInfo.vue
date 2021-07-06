@@ -168,10 +168,11 @@
     overflow: visible;
 }
 .edit-font{
-    position: relative;
+    position: absolute;
     text-align: right;
     margin-top: -48px;
     z-index: 10;
+    right: 60px;
 }
 .empty-area{
     padding-top: 120px;

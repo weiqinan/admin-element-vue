@@ -1,6 +1,6 @@
 <template>
     <div class="user_body forget-area">
-        <div class="frm_login">
+        <div class="frm_login" style="width: 300px;">
 			<h3 class="title">忘记密码</h3>
 			<div class="item_list layui-form">
                 <el-form :model="ruleForm" :rules="rules" ref="forgetPassForm" label-width="0" size="medium">
@@ -11,8 +11,9 @@
                         </el-form-item>
                     </div>
                     <div class="item">
-                        <input type="text" class="ipt code" id="veryfyCode" placeholder="输入验证码">
-                        <button type="button" id="getpass">获取验证码</button>
+                        <input type="text" style="width: 130px;" class="ipt code" id="veryfyCode" placeholder="输入验证码">
+                        <button type="button" id="getpass" v-if="verifyCountDown > 0">重新获取（{{verifyCountDown}}）</button>
+                        <button type="button" id="getpass" v-else @click="sendEmailVerifyCode">获取验证码</button>
                     </div>
                     <div class="item">
                         <el-form-item label="" prop="newPassword">
@@ -45,6 +46,14 @@
 </template>
 <style scoped>
 @import "../../assets/css/style.css";
+.item_list .item .ipt{
+    width: 100%;
+}
+.frm_login #getpass{
+    width: auto;
+    padding: 0 16px;
+    float: right;
+}
 </style>
 <style>
 .forget-area{
@@ -63,8 +72,10 @@
 }
 </style>
 <script>
-import { reSetPassWord, getUserInfo, setPassWord } from '@/service/user';
+import { reSetPassWord, getUserInfo, setPassWord, sendEmailVerifyCode } from '@/service/user';
 import { isEmail } from '@/utlis/rules';
+
+let _lastTimer;
 
 export default {
     data() {
@@ -88,6 +99,7 @@ export default {
         };
         return {
             loading: false,
+            verifyCountDown: 0,
             ruleForm: {
                 userid: '',
                 newPassword: '',
@@ -123,7 +135,19 @@ export default {
             } catch(error) {
                 return 'error';
             }
-            
+        },
+        countDown(second) {
+            this.verifyCountDown = second;
+            _lastTimer = Date.now();
+
+            setTimeout(() => {
+                second -= Math.round((Date.now() - _lastTimer) / 1000);
+                if (second > 0) {
+                    this.countDown(second);
+                } else {
+                    this.verifyCountDown = 0;
+                }
+            }, 1e3);
         },
         setPassWord() {
             setPassWord({ 
@@ -145,6 +169,12 @@ export default {
             }).catch(error => {
                 console.log(error);
                 // reject(error);
+            });
+        },
+        sendEmailVerifyCode() {
+            this.countDown(60);
+            sendEmailVerifyCode({ tomail: this.ruleForm.userid }).then((data) => {
+                console.log(data);
             });
         },
         submitForm(formName) {

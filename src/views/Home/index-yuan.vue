@@ -14,7 +14,7 @@
             <el-divider></el-divider>
             <el-row class="bot">
                 <el-col :span="12">
-                  总销售额 test
+                  总销售额
                 </el-col>
                 <el-col :span="12" class="text-right">
                    ¥ 888,888

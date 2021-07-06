@@ -1,6 +1,6 @@
 <template>
     <div class="user_body regist-area">
-        <div class="frm_login">
+        <div class="frm_login" style="width: 300px;">
             <h3 class="title">欢迎注册量化街</h3>
             <div class="item_list layui-form">
                 <el-form :model="ruleForm" :rules="rules" ref="registForm" label-width="0" size="medium">
@@ -12,8 +12,11 @@
                     </div>
 
                     <div class="item">
-                        <input type="text" class="ipt code" id="veryfyCode" placeholder="输入验证码">
-                        <button type="button" id="getpass">获取验证码</button>
+                        <el-form-item label="" prop="enterEmailCode">
+                            <el-input style="width: 130px;" v-model.trim="ruleForm.enterEmailCode" autocomplete="off" class="ipt code" maxlength="6" placeholder="输入验证码"></el-input>
+                            <button type="button" id="getpass" disabled v-if="verifyCountDown > 0">重新获取（{{verifyCountDown}}）</button>
+                            <button type="button" id="getpass" v-else @click="sendEmailVerifyCode">获取验证码</button>
+                        </el-form-item>
                     </div>
 
 
@@ -43,6 +46,14 @@
 </template>
 <style scoped>
 @import "../../assets/css/style.css";
+.item_list .item .ipt{
+    width: 100%;
+}
+.frm_login #getpass{
+    width: auto;
+    padding: 0 16px;
+    float: right;
+}
 </style>
 <style>
 .regist-area .el-input--medium .el-input__inner {
@@ -58,8 +69,10 @@
 </style>
 <script>
 // 
-import { getUserInfo, regisAccount, setPassWord } from '@/service/user';
+import { getUserInfo, regisAccount, setPassWord, sendEmailVerifyCode } from '@/service/user';
 import { isEmail } from '@/utlis/rules';
+
+let _lastTimerR;
 
 export default {
     name: 'Login',
@@ -76,15 +89,22 @@ export default {
             }
         };
         return {
+            verifyCountDown: 0,
             checked: false,
             loading: false,
+            emailCode: '',
             ruleForm: {
-                userid: ''
+                userid: '',
+                enterEmailCode: ''
             },
             rules: {
-                userid: [{
-                    validator: checkEmail
-                }]
+                userid: [
+                    { required: true, message: '请输入邮箱', trigger: 'blur' },
+                    { validator: checkEmail }
+                ],
+                enterEmailCode: [
+                    { required: true, message: '输入验证码', trigger: 'blur' }
+                ]
             }
         };
     },
@@ -99,13 +119,48 @@ export default {
             }
             return false;
         },
+        sendEmailVerifyCode() {
+            this.rules.enterEmailCode[0].required = false;
+            this.$refs.registForm.validate(async (valid) => {
+                if (valid) {
+                    sendEmailVerifyCode({ tomail: this.ruleForm.userid }).then((data) => {
+                        if (data) {
+                            this.$message({
+                                message: '验证码发送成功，请去您的邮箱当中查看',
+                                type: 'success'
+                            });
+                            this.emailCode = data;
+                            this.countDown(60);
+                        }
+                    });
+                }
+            });
+        },
+        countDown(second) {
+            this.verifyCountDown = second;
+            _lastTimerR = Date.now();
+
+            setTimeout(() => {
+                second -= Math.round((Date.now() - _lastTimerR) / 1000);
+                if (second > 0) {
+                    this.countDown(second);
+                } else {
+                    this.verifyCountDown = 0;
+                }
+            }, 1e3);
+        },
         submitForm(formName) {
             this.$refs[formName].validate();
         },
         regist(formName) {
+            this.rules.enterEmailCode[0].required = true;
             const _this = this;
             _this.$refs[formName].validate(async (valid) => {
                 if (valid) {
+                    if (this.ruleForm.enterEmailCode !== this.emailCode) {
+                        this.$message.error('验证码错误，请检查');
+                        return;
+                    }
                     _this.loading = true;
                     const res = await this.getAccountData();
                     if (res) {

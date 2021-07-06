@@ -11,9 +11,11 @@
                         </el-form-item>
                     </div>
                     <div class="item">
-                        <input type="text" style="width: 130px;" class="ipt code" id="veryfyCode" placeholder="输入验证码">
-                        <button type="button" id="getpass" v-if="verifyCountDown > 0">重新获取（{{verifyCountDown}}）</button>
-                        <button type="button" id="getpass" v-else @click="sendEmailVerifyCode">获取验证码</button>
+                        <el-form-item label="" prop="enterEmailCode">
+                            <el-input style="width: 130px;" v-model.trim="ruleForm.enterEmailCode" autocomplete="off" class="ipt code" maxlength="6" placeholder="输入验证码" @keyup.enter.native="submitForm('forgetPassForm')"></el-input>
+                            <button type="button" id="getpass" disabled v-if="verifyCountDown > 0">重新获取（{{verifyCountDown}}）</button>
+                            <button type="button" id="getpass" v-else @click="sendEmailVerifyCode">获取验证码</button>
+                        </el-form-item>
                     </div>
                     <div class="item">
                         <el-form-item label="" prop="newPassword">
@@ -104,13 +106,19 @@ export default {
                 userid: '',
                 newPassword: '',
                 newPassword2: '',
-                oldPassword: ''
+                oldPassword: '',
+                enterEmailCode: ''
             },
             userId: '',
+            emailCode: '',
             rules: {
-                userid: [{
-                    validator: checkEmail
-                }],
+                userid: [
+                    { required: true, message: '请输入邮箱', trigger: 'blur' },
+                    { validator: checkEmail }
+                ],
+                enterEmailCode: [
+                    { required: true, message: '输入验证码', trigger: 'blur' }
+                ],
                 newPassword: [
                     { required: true, message: '请输入您的新密码', trigger: 'blur' },
                     { min: 4, max: 25, message: '4-25位，不含有中文以及中英文单双引号', trigger: 'blur' }
@@ -172,14 +180,37 @@ export default {
             });
         },
         sendEmailVerifyCode() {
-            this.countDown(60);
-            sendEmailVerifyCode({ tomail: this.ruleForm.userid }).then((data) => {
-                console.log(data);
+            this.rules.newPassword[0].required = false;
+            this.rules.newPassword2[0].required = false;
+            this.rules.enterEmailCode[0].required = false;
+            this.$refs.forgetPassForm.validate(async (valid) => {
+                if (valid) {
+                    sendEmailVerifyCode({ tomail: this.ruleForm.userid }).then((data) => {
+                        if (data) {
+                            this.$message({
+                                message: '验证码发送成功，请去您的邮箱当中查看',
+                                type: 'success'
+                            });
+                            this.emailCode = data;
+                            this.countDown(60);
+                        } else {
+                            this.countDown(10);
+                            this.$message.error('验证码发送失败，请稍后重试');
+                        }
+                    });
+                }
             });
         },
         submitForm(formName) {
+            this.rules.newPassword[0].required = true;
+            this.rules.newPassword2[0].required = true;
+            this.rules.enterEmailCode[0].required = true;
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
+                    if (this.ruleForm.enterEmailCode !== this.emailCode) {
+                        this.$message.error('验证码错误，请检查');
+                        return;
+                    }
                     const str = await this.getInfo(this.ruleForm.userid);
                     this.loading = true;
 

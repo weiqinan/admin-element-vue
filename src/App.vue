@@ -10,4 +10,8 @@ export default {
 </script>
 <style>
 @import "./assets/css/style.css";
+#app{
+  max-width: 1400px;
+  margin: 0 auto;
+}
 </style>

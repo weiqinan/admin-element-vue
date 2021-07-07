@@ -129,7 +129,8 @@ export default {
   
 
   &.narrow{
-      width: $leftSideBarMinWidth;      
+      width: $leftSideBarMinWidth;
+      min-width: $leftSideBarMinWidth;
   }
 }
 </style>

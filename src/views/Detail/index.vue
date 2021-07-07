@@ -287,7 +287,7 @@
                         <span class="value">({{tradeInfo.worstprofit_date}}) ${{tradeInfo.worstprofit}}</span>
                     </li>
                     <li>
-                        <span class="title">最好的交易（按照点数计算）</span>
+                        <span class="title">最好的交易（点数计算）</span>
                         <span class="value">({{tradeInfo.bestpips_date}}) {{tradeInfo.bestpips}}</span>
                     </li>
                     <li>
@@ -937,7 +937,7 @@
         line-height: 40px;
         padding: 0 10px;
         color: #121212;
-        font-weight: bold;
+        // font-weight: bold;
     }
     li:nth-child(2n+1) {
         background: #FAFBFD;
@@ -956,7 +956,7 @@
     }
 }
 .page-tip{
-    font-size: 14px;
+    font-size: 12px;
     color: #AEAEAE;
     line-height: 24px;
     padding: 40px 20px;

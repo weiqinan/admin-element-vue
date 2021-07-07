@@ -177,7 +177,7 @@ border-radius: 16.25px; padding-left: 32px; box-sizing: border-box; font-size: 1
 .index_tips .close{float: right; margin-top: 6px; width: 8px; height: 8px; background: url(../img/ico_close.png) center/contain no-repeat;}
 .index_head{margin-bottom: 3rem;}
 .index_head .hd{clear: right;overflow: hidden; margin-bottom: 4rem;}
-.index_head .hd .sec_title{color: #364064; font-size: 16px;}
+.index_head .hd .sec_title{color: #364064;}
 .index_head .hd i.top3{display: inline-block; vertical-align: middle; margin-right: 1rem; width: 18px; height: 18px; background: url(../img/ico_top3.png) center/contain no-repeat;}
 .index_head .hd a{font-size: 12px; color: #744DFE;}
 .index_head .sec_top3{text-align: center; font-size: 0;}
@@ -201,7 +201,7 @@ border-radius: 16.25px; padding-left: 32px; box-sizing: border-box; font-size: 1
 .index_adv img{display: none;width: 100%; height: auto;}
 .index_body .hd,
 .index_body .bd{box-shadow: 0 0 10px #ccc; border-radius: 6px; display: flex; padding: 0 2rem; margin-bottom: 20px;}
-.index_body .hd .sec_title{color: #364064; font-size: 1.25rem; padding-top: 15px;}
+.index_body .hd .sec_title{color: #364064; padding-top: 15px;}
 .index_body .hd .sec_title .index_paihangbang{display: inline-block; width: 15px; height: 22px; vertical-align: middle;background:url(../img/index_paihangbang.png) center /contain no-repeat; margin-right: 1rem;}
 .index_body .hd .tab{flex:1; padding: 0 4rem;}
 .index_body .hd a{font-size: 12px; color: #744DFE; padding-top: 15px;}
@@ -327,16 +327,19 @@ button.change_pass+#defult_pass{font-size: .8rem; color: #A7A7A7;}
 }
 .charts-title-area{
     margin-bottom: 20px;
-    font-size: 16px;
+    font-size: 14px;
 }
 .charts-title-area .title{
     display: inline-block;
-    margin-right: 40px;
+    margin-right: 30px;
+    font-size: 18px;
+    font-weight: bold;
+    vertical-align: middle;
 }
 .charts-title-area .btn-item{
     display: inline-block;
-    height: 35px;
-    line-height: 35px;
+    height: 32px;
+    line-height: 32px;
     border-radius: 28px;
     padding: 0 20px;
     margin-right: 20px;

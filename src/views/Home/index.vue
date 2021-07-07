@@ -111,10 +111,8 @@
                     v-infinite-scroll="getData"
                     infinite-scroll-disabled="disabled"
                     :data="tableData"
-                    stripe
                     >
                     <el-table-column
-                        fixed
                         prop="name"
                         label="基本信息"
                         width="240">
@@ -281,7 +279,7 @@ table tbody tr:nth-child(2n+1) {
     }
 }
 .page-tip{
-    font-size: 14px;
+    font-size: 12px;
     color: #AEAEAE;
     line-height: 24px;
     padding: 20px 20px 40px;

@@ -72,7 +72,7 @@
     padding: 20px;
 }
 .page-tip{
-    font-size: 14px;
+    font-size: 12px;
     color: #AEAEAE;
     line-height: 24px;
     padding: 20px 20px 40px;

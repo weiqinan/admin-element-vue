@@ -193,17 +193,19 @@ table tbody tr:nth-child(2n+1) {
     }
 }
 .page-tip{
-    font-size: 14px;
+    font-size: 12px;
     color: #AEAEAE;
     line-height: 24px;
     padding: 20px 20px 40px;
 }
 
 .charts-title-area{
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 .charts-title-area .title{
     margin-right: 20px;
+    font-weight: normal;
+    font-size: 14px;
 }
 .index_body .bd {
     box-shadow: none;

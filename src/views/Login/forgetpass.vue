@@ -47,7 +47,6 @@
     </div>
 </template>
 <style scoped>
-@import "../../assets/css/style.css";
 .item_list .item .ipt{
     width: 100%;
 }

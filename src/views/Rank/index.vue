@@ -124,7 +124,7 @@
                             </el-table-column>
                             <el-table-column
                                 prop="years"
-                                label="年龄"
+                                label="月龄"
                                 min-width="60">
                                 <template slot-scope="{row}">
                                     <span class="code">{{row.years}}</span>
@@ -170,9 +170,6 @@
 
     </div>
 </template>
-<style>
-@import "../../assets/css/style.css";
-</style>
 <style lang="scss">
 .page{
     background: #fff;
@@ -220,7 +217,7 @@ table tbody tr:nth-child(2n+1) {
     overflow: visible;
 }
 .infinite-list-wrapper{
-    height: 400px;
+    height: 1400px;
 }
 .tips{
     text-align: center;
@@ -367,6 +364,7 @@ export default {
             tableData: [],
             loading: false,
             noMore: false,
+            keywords: '',
             pageNo: 1,
             hasLogin: false
         };
@@ -383,7 +381,22 @@ export default {
             this.hasLogin = true;
         }
     },
+    created() {
+        this.$bus.on('message', this.loadSearch);
+    },
+    beforeDestroy() {
+        this.$bus.off('message', this.loadSearch);
+    },
     methods: {
+        loadSearch(data) {
+            console.log(data);
+            this.keywords = data.data;
+            if (this.traderId) {
+                this.pageNo = 1;
+                this.tableData = [];
+                this.dataChange();
+            }
+        },
         showMenu(item) {
             if (this.traderId) {
                 this.currentMenu = item;
@@ -412,7 +425,7 @@ export default {
         },
         showDetailItem(data) {
             // this.$router.push({ path: '/detail', query: _this.otherQuery },
-            this.$router.push({ path: '/detail', query: { accountNo: data.accountno } });
+            this.$router.push({ path: '/detail', query: { accountNo: data.accountno, usernickname: data.usernickname } });
         },
         getBasic() {
             getTraders().then((data) => {
@@ -432,6 +445,7 @@ export default {
                 traderId: this.traderId,
                 holdPeriodCode: this.holdPeriodCode,
                 pageNo: this.pageNo,
+                keywords: this.keywords,
                 pageSize: 10
             };
             getTopRank(parmas).then((data) => {

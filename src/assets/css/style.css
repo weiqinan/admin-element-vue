@@ -38,7 +38,7 @@ border-radius: 0;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.frm_login{width: 270px; /* height: 575px; */ background: #fff; border-radius: 10px; box-sizing: border-box; padding: 15px 25px;}
+.frm_login{width: 270px; /* height: 575px; */ background: #fff; border-radius: 10px; box-sizing: border-box; padding: 15px 25px; margin: 0 auto;}
 .frm_login .title{color:#642FCC;font-size: 18px; line-height: 2.5; text-align: center; margin-bottom: 25px;}
 
 .frm_login .layui-form-checkbox span,.frm_login a{font-size: 12px; color: #999;}
@@ -90,7 +90,7 @@ input:-ms-input-placeholder{  /* Internet Explorer 10-11 */
 }
 .flex{display: flex; display: -webkit-flex;}
 .block{display: block; margin: auto;}
-.user_body{background: url(../img/bglogin.jpg) center /100% 100% no-repeat; width: 100vw; height: 100vh; display: flex; align-items: center;justify-content: center;}
+.user_body{background: url(../img/bglogin.jpg) center center no-repeat; width: 100vw; height: 100vh; padding-top: 100px; box-sizing: border-box;}
 
 
 

@@ -3,7 +3,7 @@
         <div class="charts-container">
             <div class="top-area">
                 <div class="top-name-area">
-                    <p>BlueWhale Capital</p>
+                    <p>{{usernickname}}</p>
                     <p>真实的（SUD）, 1:500, MetaTrader 4</p>
                 </div>
                 <div class="status-area">
@@ -20,7 +20,7 @@
         </div>
         <el-row>
             <el-col :span="8">
-                <div class="charts-container" style="min-height:555px;">
+                <div class="charts-container" style="height:555px;">
                     <div class="charts-title-area">
                         <div class="title">信息</div>
                         <div :class="['btn-item item', currentInfo === index ? 'active': '']" v-for="(item, index) in testArr4" @click="turnTab(index)" :key="index">{{item}}</div>
@@ -67,77 +67,78 @@
                     </ul>
 
                     <template v-if="currentInfo === 0">
+                        <div class="all-ul-container">
+                            <ul class="key-value-ul">
+                                <li>
+                                    <span class="title">获利</span>
+                                    <span class="value light-font">{{statisticsInfo.profit_rate}}%</span>
+                                </li>
+                                <li>
+                                    <span class="title">绝对收益</span>
+                                    <span class="value light-font">{{statisticsInfo.absbalance_rate}}%</span>
+                                </li>
+                            </ul>
 
-                        <ul class="key-value-ul">
-                            <li>
-                                <span class="title">获利</span>
-                                <span class="value light-font">{{statisticsInfo.profit_rate}}%</span>
-                            </li>
-                            <li>
-                                <span class="title">绝对收益</span>
-                                <span class="value light-font">{{statisticsInfo.absbalance_rate}}%</span>
-                            </li>
-                        </ul>
+                            <ul class="key-value-ul">
+                                <li>
+                                    <span class="title">天</span>
+                                    <span class="value">{{statisticsInfo.day_avgprofit_rate}}%</span>
+                                </li>
+                                <li>
+                                    <span class="title">每月</span>
+                                    <span class="value">{{statisticsInfo.month_avgprofit_rate}}%</span>
+                                </li>
+                                <li>
+                                    <span class="title">资金回撤</span>
+                                    <span class="value">{{statisticsInfo.maxdrawdown_rate}}%</span>
+                                </li>
+                            </ul>
 
-                        <ul class="key-value-ul">
-                            <li>
-                                <span class="title">天</span>
-                                <span class="value">{{statisticsInfo.day_avgprofit_rate}}%</span>
-                            </li>
-                            <li>
-                                <span class="title">每月</span>
-                                <span class="value">{{statisticsInfo.month_avgprofit_rate}}%</span>
-                            </li>
-                            <li>
-                                <span class="title">资金回撤</span>
-                                <span class="value">{{statisticsInfo.maxdrawdown_rate}}%</span>
-                            </li>
-                        </ul>
+                            <ul class="key-value-ul">
+                                <li>
+                                    <span class="title">余额</span>
+                                    <span class="value">${{statisticsInfo.accountbalance}} </span>
+                                </li>
+                                <li>
+                                    <span class="title">净值</span>
+                                    <span class="value">${{statisticsInfo.accountequity}}</span>
+                                </li>
+                                <li>
+                                    <span class="title">最高</span>
+                                    <span class="value light-font">${{statisticsInfo.maxprofit}}</span>
+                                </li>
+                                <li>
+                                    <span class="title">利润</span>
+                                    <span class="value">${{statisticsInfo.accountprofit}}</span>
+                                </li>
+                                <li>
+                                    <span class="title">利息</span>
+                                    <span class="value">${{statisticsInfo.swap}}</span>
+                                </li>
+                            </ul>
 
-                        <ul class="key-value-ul">
-                            <li>
-                                <span class="title">余额</span>
-                                <span class="value">${{statisticsInfo.accountbalance}} </span>
-                            </li>
-                            <li>
-                                <span class="title">净值</span>
-                                <span class="value">${{statisticsInfo.accountequity}}</span>
-                            </li>
-                            <li>
-                                <span class="title">最高</span>
-                                <span class="value light-font">${{statisticsInfo.maxprofit}}</span>
-                            </li>
-                            <li>
-                                <span class="title">利润</span>
-                                <span class="value">${{statisticsInfo.accountprofit}}</span>
-                            </li>
-                            <li>
-                                <span class="title">利息</span>
-                                <span class="value">${{statisticsInfo.swap}}</span>
-                            </li>
-                        </ul>
+                            <ul class="key-value-ul">
+                                <li>
+                                    <span class="title">入金</span>
+                                    <span class="value">${{statisticsInfo.deposit}}</span>
+                                </li>
+                                <li>
+                                    <span class="title">取款</span>
+                                    <span class="value">${{statisticsInfo.withdrawal}}</span>
+                                </li>
+                            </ul>
 
-                        <ul class="key-value-ul">
-                            <li>
-                                <span class="title">入金</span>
-                                <span class="value">${{statisticsInfo.deposit}}</span>
-                            </li>
-                            <li>
-                                <span class="title">取款</span>
-                                <span class="value">${{statisticsInfo.withdrawal}}</span>
-                            </li>
-                        </ul>
-
-                        <ul class="key-value-ul">
-                            <li>
-                                <span class="title">已更新</span>
-                                <span class="value">{{statisticsInfo.updatecount}}</span>
-                            </li>
-                            <li>
-                                <span class="title">追踪</span>
-                                <span class="value">{{statisticsInfo.updateminutes}}</span>
-                            </li>
-                        </ul>
+                            <ul class="key-value-ul">
+                                <li>
+                                    <span class="title">已更新</span>
+                                    <span class="value">{{statisticsInfo.updatecount}}</span>
+                                </li>
+                                <li>
+                                    <span class="title">追踪</span>
+                                    <span class="value">{{statisticsInfo.updateminutes}}</span>
+                                </li>
+                            </ul>
+                        </div>
                     </template>
                 </div>
             </el-col>
@@ -815,6 +816,11 @@
         box-sizing: border-box;
     }
 }
+
+.all-ul-container {
+    height: 490px;
+    overflow: auto;
+}
 .el-pagination{
     text-align: right;
     margin-top: 20px;
@@ -984,6 +990,7 @@ import { getStatInfo, getTradeStatForPeriod, getAdvStatTradeInfo, getAdvStatSumm
 export default {
     data() {
         return {
+            usernickname: '',
             yearArr: ['2021', '2020', '2019', '2018'],
             isLoadYear: true,
             currentYearIndex: 0,
@@ -1687,13 +1694,7 @@ export default {
         }
     },
     async mounted() {
-
-        // this.$message({
-        //   showClose: true,
-        //   message: '恭喜你，这是一条成功消息',
-        //   type: 'error',
-        //   duration: 0
-        // });
+        this.usernickname = this.$route.query.usernickname;
 
         const _this = this;
         await this.getStatInfo();

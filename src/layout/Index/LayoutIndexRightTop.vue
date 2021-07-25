@@ -5,10 +5,13 @@
                  <svg-icon icon-class="s-fold" />
                </div>
                <div class="indexlayout-top-menu">
-                    <el-input
+                    <!-- <el-input
                         placeholder="搜索"
                         prefix-icon="el-icon-search"
                         v-model="input2" style="width:240px;">
+                    </el-input> -->
+                    <el-input placeholder="搜索" v-model="searchInput" style="width:240px; height: 32px; margin-top: 24px;">
+                      <el-button slot="append" @click="searchChange" icon="el-icon-search"></el-button>
                     </el-input>
                   <!-- <el-scrollbar class="horizontal-scrollbar">
                       <template v-if="siteTopNavEnable">
@@ -34,7 +37,7 @@
                     </el-dropdown>
 
                     <!-- <router-link class="index-layout-message" to="/account?mode=mes" title="消息"> -->
-                    <el-dropdown placement="bottom" @visible-change="test">
+                    <el-dropdown placement="bottom" @visible-change="menuListChange">
                         <span class="el-dropdown-link">
                             <!-- <svg-icon icon-class="message" /> -->
                             <img class="money-ico" src="../../assets/img/ico_ring.png" />
@@ -81,6 +84,7 @@ import { mapGetters } from 'vuex';
 // import AppLink from '@/components/Link';
 import { getBelongTopMenuPath } from '@/utlis/permission';
 import { getUserAccountMessage, getUserTradeMessage } from '@/service/user';
+
 export default {
   name: 'LayoutIndexRightTop',
   components: {
@@ -89,7 +93,7 @@ export default {
   },
   data() {
       return {
-          input2: '',
+          searchInput: '',
           accountLength: 0,
           tradeLength: 0,
           logoutShow: false,
@@ -122,8 +126,12 @@ export default {
       }
   },
   methods: {
+    searchChange() {
+        console.log('test');
+        this.$bus.emit('message', { data: this.searchInput });
+    },
     toggleSideBar() {
-      this.$store.dispatch('app/toggleSideBar');
+        this.$store.dispatch('app/toggleSideBar');
     },
     login() {
         this.$router.push({ path: '/login' });
@@ -134,7 +142,7 @@ export default {
     turnToAccount() {
         this.$router.push({ path: '/account?currentMenu=manage' });
     },
-    test(val) {
+    menuListChange(val) {
         if (val && this.userId) {
             this.getUserAccountMessage();
             this.getUserTradeMessage();

@@ -66,7 +66,6 @@
 </div>
 </template>
 <style>
-@import "../../assets/css/style.css";
 .account-page{
     background: #fff;
     padding: 20px;

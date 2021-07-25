@@ -68,7 +68,6 @@
 
 </template>
 <style>
-@import "../../assets/css/style.css";
 .empty-area{
     padding: 160px 0 260px;
 }

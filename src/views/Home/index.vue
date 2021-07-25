@@ -20,7 +20,7 @@
                         </div>
                         <div class="right">
                             <li>
-                                <label>年龄</label>{{tableData[0].years}}年
+                                <label>月龄</label>{{tableData[0].years}}月
                             </li>
                             <li>
                                 <label>月盈利率</label>{{tableData[0].avgprofit_rate}}%
@@ -46,7 +46,7 @@
                         </div>
                         <div class="right">
                             <li>
-                                <label>年龄</label>{{tableData[1].years}}年
+                                <label>月龄</label>{{tableData[1].years}}月
                             </li>
                             <li>
                                 <label>月盈利率</label>{{tableData[1].avgprofit_rate}}%
@@ -71,7 +71,7 @@
                         </div>
                         <div class="right">
                             <li>
-                                <label>年龄</label>{{tableData[2].years}}年
+                                <label>月龄</label>{{tableData[2].years}}月
                             </li>
                             <li>
                                 <label>月盈利率</label>{{tableData[2].avgprofit_rate}}%
@@ -192,7 +192,7 @@
                     </el-table-column>
                     <el-table-column
                         prop="years"
-                        label="年龄"
+                        label="月龄"
                         min-width="100">
                         <template slot-scope="{row}">
                             <span class="code">{{row.years}}</span>
@@ -240,12 +240,9 @@
     </p>
 </div>
 </template>
-<style>
-@import "../../assets/css/style.css";
-</style>
 <style lang="scss">
 .infinite-list-wrapper{
-    height: 400px;
+    height: 1400px;
 }
 .tips{
     text-align: center;
@@ -372,6 +369,7 @@ export default {
             loading: false,
             noMore: false,
             showTip: true,
+            keywords: '',
             hasLogin: false
         };
     },
@@ -386,7 +384,20 @@ export default {
             this.hasLogin = true;
         }
     },
+    created() {
+        this.$bus.on('message', this.loadSearch);
+    },
+    beforeDestroy() {
+        this.$bus.off('message', this.loadSearch);
+    },
     methods: {
+        loadSearch(data) {
+            console.log(data);
+            this.keywords = data.data;
+            this.pageNo = 1;
+            this.tableData = [];
+            this.getData();
+        },
         showMenu(item) {
             this.currentMenu = item;
             this.accountType = item;
@@ -408,6 +419,7 @@ export default {
             getHomeTopRank({
                 accountType: this.accountType,
                 pageNo: this.pageNo,
+                keywords: this.keywords,
                 pageSize: 10
             }).then((data) => {
                 if (data && data.length) {
@@ -451,7 +463,7 @@ export default {
             }
         },
         showDetailItem(data) {
-            this.$router.push({ path: '/detail', query: { accountNo: data.accountno } });
+            this.$router.push({ path: '/detail', query: { accountNo: data.accountno, usernickname: data.usernickname } });
         },
         async getInfo(data) {
             const item = await getUserAccountBaseStatInfo({accountNo: data.accountno});

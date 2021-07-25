@@ -3,6 +3,7 @@
  * @author LiQingSong
  */
 import Vue from 'vue';
+import VueBus from 'vue-bus';
 
 // CSS 重置 初始化
 import 'normalize.css/normalize.css';
@@ -26,6 +27,8 @@ import '@/router/permission';
 
 // 引入扩展内容
 import '@/main.ext';
+
+Vue.use(VueBus);
 
 // 设置 ElementUI
 Vue.use(ElementUI, { size: 'small' });

@@ -112,7 +112,6 @@ export default {
                 userid: this.userId,
                 password: this.ruleForm.newPassword
               }).then(data => {
-                console.log(data);
                 if (data) {
                     this.$message({
                         message: '密码设置成功',

@@ -431,7 +431,7 @@ export default {
             getTraders().then((data) => {
                 if(data && data.length) {
                     this.traderId = data[0].traderid;
-                    this.tradersArr = data;
+                    this.tradersArr = data.slice(0, 20);
                     this.dataChange();
                 }
             });

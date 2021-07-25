@@ -194,10 +194,8 @@ export default {
         }
     },
     activated() {
-        console.log('activated');
     },
     created() {
-        console.log('created');
         const query = this.$route.query;
         if (query.mode) {
             this.pageMode = query.mode;

@@ -127,7 +127,6 @@ export default {
   },
   methods: {
     searchChange() {
-        console.log('test');
         this.$bus.emit('message', { data: this.searchInput });
     },
     toggleSideBar() {

@@ -124,7 +124,6 @@ export default {
     },
     watch: {
         visible(val) {
-            console.log('visible', val);
             this.innerVisible = val;
             if(val) {
                 this.getList();
@@ -135,14 +134,12 @@ export default {
         getList() {
             const userId = localStorage.getItem('webUserId') || '';
             getUserAccountList({ userId}).then((data) => {
-                console.log(data);
                 if (data.length) {
                     this.tableData = data;
                 }
             });
         },
         addAccount() {
-            console.log('addAccount');
             this.$emit('addAccount', {});
         },
         manageAccount(data) {

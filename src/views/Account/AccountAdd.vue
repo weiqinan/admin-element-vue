@@ -456,7 +456,6 @@ export default {
             return obj;
         },
         async getDict() {
-            console.log('getDict');
             const data = await getTraders();
 
             if (data.length) {
@@ -464,10 +463,8 @@ export default {
             }
         },
         getAccountInfo(no) {
-            console.log('getAccountInfo');
             getAccountInfo({ accountNo: no }).then((data) => {
                 Object.assign( this.ruleForm, data);
-                console.log(this.ruleForm);
 
                 this.oldPassword = this.ruleForm.password;
                 // this.traderidChange(data.traderid);
@@ -492,7 +489,6 @@ export default {
                 if (valid) {
                     this.loading = true;
                     const params = this.doPramas();
-                    console.log(params);
 
                     updateAccount(params).then((data) => {
                         this.loading = false;

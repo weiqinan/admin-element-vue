@@ -160,7 +160,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .login {
-  display: flex;
   width: 100%;
   height: 100vh;
   min-height: 500px;
@@ -170,7 +169,6 @@ export default {
 //   background-position: center center;
 //   background-attachment: fixed;
 //   background-size: cover;
-  align-items: center;
   .form{
       flex: none;
       width: 300px;
